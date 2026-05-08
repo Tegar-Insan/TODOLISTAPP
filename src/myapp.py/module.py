@@ -9,6 +9,7 @@ class User(BaseModel):
     age : int
 
 
+
 class UserList (RootModel):
     root: list[User]
 
@@ -82,7 +83,7 @@ def login_user():
 
 
     
-
+ 
         
         
     
