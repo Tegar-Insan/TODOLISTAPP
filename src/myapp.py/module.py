@@ -2,6 +2,10 @@ import os
 import json
 from pydantic import BaseModel, RootModel, field_validator
 from pydantic import ValidationError
+from module2 import Todolist, TodolistList, todolist, create_todolist, view_todolist
+from typing import List, Optional
+
+
 
 class User(BaseModel):
     username: str
@@ -38,7 +42,7 @@ def create_user():
 
     data=json.loads(user_content)
     with open ("users.json", "w") as f:
-        data.append(user.model_dump())
+        data.append(user.model_dump()) 
         json.dump(data, f, indent=4)
 
     while False:
@@ -58,23 +62,28 @@ def login_user():
     
    
     with open('users.json', 'r') as f:
-        raw_data = json.load(f)
+        raw_data = f.read()
     
-    user = User
-    user_data = UserList.model_validate(raw_data).root
+    user_data = UserList.model_validate_json(raw_data).root
     db = UserList(root=user_data)
     user_found = None
     try: 
         for user in user_data:
             if  name_user == user.username and password_user == user.password:
-                print("Login successful!")
                 user_found = UserList (root=[user])
                 user_found = True
+                print (f"Login sucessfull, welcome back {name_user}")
+                todolist()
                 break
         else:
-            raise ValueError("Invalid username or password.")
+            print("Invalid username or password. Please try again.")
+            return None
+            main()
     except(ValidationError, ValueError, PermissionError) as e:
         print(f"Error: {e}")
+
+      
+    
 
     
 

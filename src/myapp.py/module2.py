@@ -2,10 +2,8 @@ import os
 from pydantic import BaseModel, RootModel, Field
 import json
 from pydantic import ValidationError
-from module import User, UserList, login_user
 from typing import List, Optional
 
-user = User(username="", password="", age=0)
 class Todolist(BaseModel):
     title: str
     description: str
@@ -16,15 +14,8 @@ class TodolistList (RootModel):
     root: list[Todolist]
 
 
-def todolist():
-
-    user_name = user.username
-    password_user = user.password
-
-    
-    
+def todolist(): 
     print ("\n"""""""""""WELCOME TO THE TODO LIST APP!""""""""""")
-    print (f'{"*" * 50} PROFILE: {user_name} {"*" * 50}')
     print ("here you can create your own todo list and manage your tasks effectively.")
     print ("choose from the options below to get started:")
     print("1. Create a new task\n2. View your todo list\n3. Exit the app")
@@ -38,12 +29,11 @@ def create_todolist(choice):
         input_description = input("Describe your task: ")
         input_due_date = input("When is the deadline? (YYYY-MM-DD): ")
         task = Todolist(title=input_title, description=input_description, due_date=input_due_date)
+    
+    dumped = task.model_validate_json()
 
-    with open("tasks.json","r") as e:
-        content = e.read()
-        validate = Todolist.model_validate_json(content)
     with open ("todolist.json", "w") as f:
-        json.dump(task.model_dump(), f, indent=4)
+        f.write(dumped)
 
     print("Task created succesfully!")
    
@@ -67,6 +57,7 @@ def view_todolist(choice):
 
     if choice == "3":
         print("Exiting the app.")
+        main()
     
 
         
