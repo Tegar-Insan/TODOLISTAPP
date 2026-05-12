@@ -5,10 +5,10 @@ from pydantic import ValidationError
 from typing import List, Optional
 
 class Todolist(BaseModel):
-    title: str
+    title: str 
     description: str
-    due_date: str
-    status: str = Field(default="pending", description="The status of the task, either 'pending' or 'completed'")
+    duedate:int | str
+    status: str = Field(default="pending")
 
 class TodolistList (RootModel):
     root: list[Todolist]
@@ -25,22 +25,34 @@ def todolist():
 
 def create_todolist(choice):
     if choice == "1":
-        input_title = input("What do you want to do?")
+        input_title = input("What do you want to do: ")
         input_description = input("Describe your task: ")
-        input_due_date = input("When is the deadline? (YYYY-MM-DD): ")
-        task = Todolist(title=input_title, description=input_description, due_date=input_due_date)
+        input_due_date = int(input("When is the deadline?: "))
+        task = Todolist(title=input_title, description=input_description, duedate=input_due_date)    
+        dumped = task.model_dump_json()
+        
+    with open("task.json","r") as f:
+        content_todo_list= f.read()
     
-    dumped = task.model_validate_json()
+    
+    if not os.path.exists("task.json"):        
+        content_todo_list = []
 
-    with open ("todolist.json", "w") as f:
-        f.write(dumped)
+    else:
+        content_todo_list += dumped
+        dataloads = json.loads(content_todo_list) 
 
+    with open("task.json","w") as e:
+        dataloads.append(task.model_dump())
+        e.write(content_todo_list)
+        json.dump(content_todo_list ,e, indent=4)
+  
+    return e
     print("Task created succesfully!")
    
-
-    
+   
 def view_todolist(choice): 
-    with open("todolist.json", "r") as f: 
+    with open("task.json", "r") as f: 
         content = f.read()
         validate = Todolist.model_validate_json(content)
 
@@ -52,7 +64,7 @@ def view_todolist(choice):
             print(task.status)
             break
     else: 
-        print("Invalid choice. Please try again.")
+        print("Invalid choice. Please try again.") 
    
 
     if choice == "3":

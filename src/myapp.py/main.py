@@ -1,7 +1,6 @@
 from module import User, UserList, create_user, login_user 
 from typing import List, Optional
 from pydantic import ValidationError
-from module2 import Todolist, TodolistList, todolist, create_todolist, view_todolist
 from pydantic import BaseModel, RootModel, Field
 import json
 
@@ -21,7 +20,7 @@ def main():
             print("WELCOME TO THE APP!") 
         elif choice == "2":
             login_user()
-            break
+            break 
         elif choice == "3":
             print("Exiting the app, thank you.")
             break

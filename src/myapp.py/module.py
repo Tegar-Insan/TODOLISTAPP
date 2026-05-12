@@ -57,30 +57,30 @@ def create_user():
 
     
 def login_user():
-    name_user = input("What is your name? ")
-    password_user = input("What is your password? ") 
+
+    while True:
+        name_user = input("What is your name? ")
+        password_user = input("What is your password? ") 
+        with open('users.json', 'r') as f:
+            raw_data = f.read()
     
-   
-    with open('users.json', 'r') as f:
-        raw_data = f.read()
-    
-    user_data = UserList.model_validate_json(raw_data).root
-    db = UserList(root=user_data)
-    user_found = None
-    try: 
-        for user in user_data:
-            if  name_user == user.username and password_user == user.password:
-                user_found = UserList (root=[user])
-                user_found = True
-                print (f"Login sucessfull, welcome back {name_user}")
-                todolist()
-                break
-        else:
-            print("Invalid username or password. Please try again.")
-            return None
-            main()
-    except(ValidationError, ValueError, PermissionError) as e:
-        print(f"Error: {e}")
+        user_data = UserList.model_validate_json(raw_data).root
+        db = UserList(root=user_data)
+        user_found = None
+        try: 
+            for user in user_data:
+                if  name_user == user.username and password_user == user.password:
+                    user_found = UserList (root=[user])
+                    user_found = True
+                    print (f"Login sucessfull, welcome back {name_user}")
+                    todolist()
+                    break
+            else:
+                print("invalid password and username\n try again")
+
+        except(ValidationError, ValueError, PermissionError) as e:
+            print(f"ERROR MADAFAKA{e}")
+          
 
       
     
