@@ -2,7 +2,7 @@ import os
 import json
 from pydantic import BaseModel, RootModel, field_validator
 from pydantic import ValidationError
-from module2 import Todolist, TodolistList, todolist, create_todolist, view_todolist
+from module2 import Todolist, TodolistList, todolist
 from typing import List, Optional
 
 
@@ -57,7 +57,6 @@ def create_user():
 
     
 def login_user():
-
     while True:
         name_user = input("What is your name? ")
         password_user = input("What is your password? ") 
@@ -79,7 +78,7 @@ def login_user():
                 print("invalid password and username\n try again")
 
         except(ValidationError, ValueError, PermissionError) as e:
-            print(f"ERROR MADAFAKA{e}")
+            print(f"ERROR MADAFAKA {e}")
           
 
       
